@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassManager — Coaching Class Manager</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">🎓</span>
+        <div>
+          <h1 id="brand-name">ClassManager</h1>
+          <p class="brand-sub">Coaching class manager — students, fees, attendance &amp; marks</p>
+        </div>
+      </div>
+      <nav class="tabs" aria-label="Main">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="students">Students</button>
+        <button class="tab-btn" data-tab="fees">Fees</button>
+        <button class="tab-btn" data-tab="attendance">Attendance</button>
+        <button class="tab-btn" data-tab="marks">Marks</button>
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ============ DASHBOARD ============ -->
+      <section class="tab-pane active" id="tab-dashboard">
+        <div class="stat-grid" id="dash-stats"></div>
+        <div class="panel-grid">
+          <div class="panel">
+            <h2>Recent payments</h2>
+            <div id="dash-recent-payments"></div>
+          </div>
+          <div class="panel">
+            <h2>Top defaulters</h2>
+            <div id="dash-defaulters"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STUDENTS ============ -->
+      <section class="tab-pane" id="tab-students">
+        <div class="toolbar">
+          <input id="student-search" type="search" placeholder="Search name, batch or phone…" />
+          <button class="btn primary" id="add-student-btn">+ Add student</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Batch</th><th>Phone</th><th>Admitted</th><th>Fee due</th><th>Attendance</th><th></th></tr>
+            </thead>
+            <tbody id="students-tbody"></tbody>
+          </table>
+        </div>
+        <p class="hint">✉️ <strong>Parent msg</strong> builds an AI-written progress message for the parent (works offline with a built-in template too).</p>
+      </section>
+
+      <!-- ============ FEES ============ -->
+      <section class="tab-pane" id="tab-fees">
+        <div class="panel-grid">
+          <div class="panel">
+            <h2>Fee plans <span class="muted">(monthly, per batch)</span></h2>
+            <div id="plans-list"></div>
+            <div class="form-row">
+              <input id="plan-batch" placeholder="Batch (e.g. Class 10 – Morning)" />
+              <input id="plan-amount" type="number" min="0" placeholder="₹ per month" />
+              <button class="btn" id="add-plan-btn">Save plan</button>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>Record payment</h2>
+            <div class="form-grid">
+              <label>Student
+                <select id="pay-student"></select>
+              </label>
+              <label>Amount (₹)
+                <input id="pay-amount" type="number" min="1" placeholder="e.g. 1500" />
+              </label>
+              <label>Date
+                <input id="pay-date" type="date" />
+              </label>
+              <label>Mode
+                <select id="pay-mode">
+                  <option>Cash</option><option>UPI</option><option>Card</option><option>Bank transfer</option>
+                </select>
+              </label>
+            </div>
+            <button class="btn primary" id="save-payment-btn">Save payment</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Defaulter list</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Student</th><th>Batch</th><th>Phone</th><th>Expected</th><th>Paid</th><th>Due</th></tr></thead>
+            <tbody id="defaulters-tbody"></tbody>
+          </table></div>
+        </div>
+        <div class="panel">
+          <h2>Payment history</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Receipt</th><th>Date</th><th>Student</th><th>Amount</th><th>Mode</th><th></th></tr></thead>
+            <tbody id="payments-tbody"></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ============ ATTENDANCE ============ -->
+      <section class="tab-pane" id="tab-attendance">
+        <div class="toolbar">
+          <label>Date <input id="att-date" type="date" /></label>
+          <label>Batch <select id="att-batch"></select></label>
+          <button class="btn" id="att-mark-all">Mark all present</button>
+          <button class="btn" id="att-clear">Clear day</button>
+        </div>
+        <div id="att-list"></div>
+        <div class="panel"><h2>Batch summary</h2><div id="att-summary"></div></div>
+      </section>
+
+      <!-- ============ MARKS ============ -->
+      <section class="tab-pane" id="tab-marks">
+        <div class="panel-grid">
+          <div class="panel">
+            <h2>Add test</h2>
+            <div class="form-grid">
+              <label>Test name <input id="test-name" placeholder="e.g. Maths Unit Test 2" /></label>
+              <label>Subject <input id="test-subject" placeholder="e.g. Maths" /></label>
+              <label>Date <input id="test-date" type="date" /></label>
+              <label>Max marks <input id="test-max" type="number" min="1" value="100" /></label>
+              <label>Batch <select id="test-batch"></select></label>
+            </div>
+            <button class="btn primary" id="add-test-btn">Add test</button>
+          </div>
+          <div class="panel">
+            <h2>Student progress</h2>
+            <label>Student <select id="prog-student"></select></label>
+            <div id="prog-view"></div>
+          </div>
+        </div>
+        <div id="tests-list"></div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="tab-pane" id="tab-settings">
+        <div class="panel">
+          <h2>Coaching details</h2>
+          <div class="form-row">
+            <input id="set-coaching" placeholder="Coaching class name (appears on receipts)" />
+            <button class="btn" id="save-settings-btn">Save</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Data</h2>
+          <p class="muted">All data lives in this browser's localStorage — no account, no server, works offline.</p>
+          <div class="form-row">
+            <button class="btn" id="demo-btn">Load demo data</button>
+            <button class="btn danger" id="erase-btn">Erase all data</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>About</h2>
+          <p>ClassManager is a single-page app: <code>index.html</code> + <code>styles.css</code> + <code>app.js</code>. No build step, no dependencies — open <code>index.html</code> directly or host it on GitHub Pages.</p>
+          <p>The <strong>✉️ Parent msg</strong> button on each student uses the keyless Pollinations text API to draft a progress message; if you're offline or the API is busy, it falls back to a built-in template. No API key needed.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>ClassManager · data stays in your browser</span>
+    </footer>
+  </div>
+
+  <!-- Student add/edit modal -->
+  <div class="modal-backdrop hidden" id="student-modal">
+    <div class="modal">
+      <h2 id="student-modal-title">Add student</h2>
+      <div class="form-grid">
+        <label>Name <input id="st-name" placeholder="Full name" /></label>
+        <label>Batch <input id="st-batch" placeholder="e.g. Class 10 – Morning" list="batch-datalist" /></label>
+        <label>Phone <input id="st-phone" placeholder="Parent's phone" /></label>
+        <label>Admission date <input id="st-admitted" type="date" /></label>
+      </div>
+      <datalist id="batch-datalist"></datalist>
+      <div class="modal-actions">
+        <button class="btn" id="student-modal-cancel">Cancel</button>
+        <button class="btn primary" id="student-modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent message modal -->
+  <div class="modal-backdrop hidden" id="parent-modal">
+    <div class="modal">
+      <h2>Message for <span id="parent-student-name"></span>'s parent</h2>
+      <div id="parent-stats" class="muted"></div>
+      <div class="form-row">
+        <label>Language
+          <select id="parent-lang">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+          </select>
+        </label>
+        <button class="btn primary" id="parent-generate">✨ Generate with AI</button>
+      </div>
+      <textarea id="parent-text" rows="6" readonly placeholder="Click “Generate with AI” — or use the template below."></textarea>
+      <p class="muted small" id="parent-note"></p>
+      <div class="modal-actions">
+        <button class="btn" id="parent-close">Close</button>
+        <button class="btn primary" id="parent-copy">Copy message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Receipt print area (visible only when printing) -->
+  <div id="print-area"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
